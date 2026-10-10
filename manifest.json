@@ -1,12 +1,12 @@
 {
   "name": "cizgimax",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scrapers": [
     {
       "id": "cizgimax",
       "name": "ÇizgiMax",
       "description": "cizgimax.online Türkçe dublajlı çizgi film / anime bölümleri",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "author": "custom",
       "supportedTypes": ["tv"],
       "filename": "providers/cizgimax.js",
