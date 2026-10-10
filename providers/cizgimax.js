@@ -12,6 +12,7 @@ var AYAR = {
   MAX_SORGU: 3,          // en fazla kaç arama yapılsın
   TELIF_ATLA: true,      // site "telif nedeniyle açılmıyor" diyen sunucuları (sibnet) atla
   SADECE_DUBLAJ: false,  // true: altyazılı sunucular gösterilmesin
+  SADECE_SIRA: 2,        // sadece listedeki bu sıradaki akış kalsın (2 = ikinci). 0 = hepsini göster
   ARAMA_SURESI: 5000,    // ms
   SUNUCU_SURESI: 6000,   // ms (her sunucu çözümü)
   GENEL_SURE: 11000      // ms
@@ -244,7 +245,7 @@ function langLabel(l) { return l === 'dub' ? 'TR Dublaj' : (l === 'sub' ? 'TR Al
 function getStreamsInner(tmdbId, mediaType, season, episode) {
   if (mediaType !== 'tv') return Promise.resolve([]);
   season = parseInt(season, 10) || 1; episode = parseInt(episode, 10) || 1;
-  dbg = ['cizgimax v1.0.0'];
+  dbg = ['cizgimax v1.0.1'];
   var base = 'https://api.themoviedb.org/3/tv/' + tmdbId + '?api_key=' + TMDB_KEY;
   return Promise.all([
     getJson(base + '&language=tr-TR&append_to_response=alternative_titles'),
@@ -330,6 +331,7 @@ function getStreamsInner(tmdbId, mediaType, season, episode) {
             });
           });
           if (!streams.length) return debugStream('video linki cikmadi');
+          if (AYAR.SADECE_SIRA > 0) streams = [streams[Math.min(AYAR.SADECE_SIRA, streams.length) - 1]];
           return AYAR.DEBUG_MODU ? streams.concat(debugStream('akis: ' + streams.length)) : streams;
         });
       });
