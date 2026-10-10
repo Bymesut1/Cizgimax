@@ -7,7 +7,7 @@
 var AYAR = {
   SITE: 'https://cizgimax.online',
   EKLENTI_ADI: 'ÇizgiMax',
-  DEBUG_MODU: false,     // true: akışların altında da teşhis satırları görünür. (Akış çıkmazsa zaten otomatik görünür.)
+  DEBUG_MODU: false,     // true: teşhis (DEBUG) satırları görünür. Normalde kapalı kalsın.
   MAX_ADAY: 3,           // en fazla kaç aday dizi için bölüm sayfası denensin
   MAX_SORGU: 3,          // en fazla kaç arama yapılsın
   TELIF_ATLA: true,      // site "telif nedeniyle açılmıyor" diyen sunucuları (sibnet) atla
@@ -236,6 +236,7 @@ function resolveServer(s, pageUrl) {
 
 // ---------------- Ana akış ----------------
 function debugStream(msg) {
+  if (!AYAR.DEBUG_MODU) return [];   // teşhis kapalıyken hiçbir DEBUG satırı gösterme
   return [msg].concat(dbg.slice(0, 40)).map(function (r) {
     return { name: 'DEBUG ' + r, title: 'DEBUG ' + r, url: 'https://debug.invalid/', quality: 'Auto', provider: PROVIDER_ID };
   });
@@ -245,7 +246,7 @@ function langLabel(l) { return l === 'dub' ? 'TR Dublaj' : (l === 'sub' ? 'TR Al
 function getStreamsInner(tmdbId, mediaType, season, episode) {
   if (mediaType !== 'tv') return Promise.resolve([]);
   season = parseInt(season, 10) || 1; episode = parseInt(episode, 10) || 1;
-  dbg = ['cizgimax v1.0.1'];
+  dbg = ['cizgimax v1.0.2'];
   var base = 'https://api.themoviedb.org/3/tv/' + tmdbId + '?api_key=' + TMDB_KEY;
   return Promise.all([
     getJson(base + '&language=tr-TR&append_to_response=alternative_titles'),
